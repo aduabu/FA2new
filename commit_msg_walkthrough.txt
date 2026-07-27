@@ -1,0 +1,42 @@
+docs: create comprehensive WALKTHROUGH.md developer and operator guide
+
+Prompt:
+Create docs/WALKTHROUGH.md as the developer and operator walkthrough covering 20 essential sections:
+1. Welcome & Architecture Stack Diagram
+2. Repository Tour
+3. Developer Boot Process
+4. Request Lifecycle
+5. Transaction Flow
+6. Event Bus & Webhooks
+7. Workflow Approval State Machine
+8. Shared Component Framework
+9. AI Assistant Advisory Rules
+10. Plugin SDK Specification
+11. REST API Architecture & OpenAPI
+12. Background Workers & Redis Scheduler
+13. Multi-Tenant Architecture
+14. Testing Strategy & Quality Assurance
+15. Git Commit & Restore Point Workflow
+16. Release Engineering Process
+17. Debugging & Troubleshooting Guide
+18. Deployment Guide
+19. Backup & Disaster Recovery (PITR)
+20. Product Roadmap (v1.0.x, v1.1, v1.2, v2.0)
+
+Git workflow: Complete, commit with exact format, push to GitHub.
+
+Summary:
+- Created docs/WALKTHROUGH.md developer and operator guide covering all 20 structural sections with architecture diagrams and workflows.
+- Registered walkthrough artifact in artifacts directory.
+
+Reason:
+To serve as the primary entry point for developers, operators, and administrators joining the FrontAccounting ERP Enterprise Platform codebase.
+
+Impact:
+docs/WALKTHROUGH.md.
+
+Testing:
+Verified markdown rendering, links, code snippets, and ASCII architecture diagrams.
+
+Restore Point:
+This commit represents a stable snapshot and can be safely restored.
