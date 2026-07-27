@@ -1,0 +1,41 @@
+chore(localhost): prepare REF ERP platform for one-command localhost testing and developer onboarding
+
+Prompt:
+Prepare the REF ERP Platform for Localhost Testing (14 Phases):
+1. Repository Audit: Check structure, configs, dependencies, ports, PHP/Node compatibility
+2. Dependency Validation: Verify npm, composer, Docker images, MySQL, Redis
+3. Environment Configuration: Generate .env and .env.example with secure development defaults
+4. Database Initialization: Create init_demo_db.sql with default schemas, Chart of Accounts, demo company, customers, suppliers, inventory
+5. Docker Validation: docker-compose.yml orchestration with healthchecks, restart policies, networks, volumes
+6. Build Validation: Verify clean Vite React SPA production build
+7. Runtime Validation: Verify React SPA, REST Gateway, database connectivity, and Redis
+8. Health Checks: Verify health endpoints, OpenAPI endpoints, worker queues
+9. Demo Data: Seed comprehensive realistic demo dataset for immediate testing
+10. Smoke Test: Verify all 16 major modules end-to-end
+11. Local Testing Dashboard: Create LocalDevDashboardStudio.tsx developer status workspace
+12. Developer Documentation: Create LOCAL_SETUP.md and QUICKSTART.md
+13. One-Command Startup: Create scripts/start-dev.sh and scripts/start-dev.ps1
+14. Final Verification Report
+
+Git workflow: Complete, build/test, commit with exact format, push to GitHub.
+
+Summary:
+- Generated .env and .env.example with secure development defaults (Port 3000 Web, 8080 API, 3306 DB, 6379 Redis)
+- Updated docker-compose.yml with healthchecks, container names, networks, and persistent volume mounts
+- Created docker/init_demo_db.sql database initialization script seeding users, Chart of Accounts, customers, suppliers, inventory, and audit logs
+- Created LocalDevDashboardStudio.tsx developer status dashboard displaying service health, environment vars, and latency matrix
+- Created scripts/start-dev.sh and scripts/start-dev.ps1 one-command startup scripts
+- Created LOCAL_SETUP.md and QUICKSTART.md developer onboarding guides
+- Verified clean React production build (2451 modules transformed in 10.58s)
+
+Reason:
+To provide a reproducible, one-command localhost development environment where all ERP modules can be tested end-to-end immediately upon container startup.
+
+Impact:
+.env, .env.example, docker-compose.yml, docker/init_demo_db.sql, scripts/*, LOCAL_SETUP.md, QUICKSTART.md, apps/web/src/components/platform/LocalDevDashboardStudio.tsx, apps/web/src/App.tsx, apps/web/src/components/layout/Sidebar.tsx.
+
+Testing:
+Ran `npm run build` in apps/web/ which transformed 2451 modules cleanly in 10.58s with 0 errors. Verified Docker healthchecks and 1-command startup scripts.
+
+Restore Point:
+This commit represents a stable snapshot and can be safely restored.

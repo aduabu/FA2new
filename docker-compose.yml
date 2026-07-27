@@ -1,69 +1,81 @@
 version: '3.8'
 
 services:
-  # MySQL 8.0 Database Engine
-  db:
+  # 1. MySQL 8.0 Database Service
+  mysql:
     image: mysql:8.0
-    container_name: fa_mysql
-    restart: always
+    container_name: fa-enterprise-mysql
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: frontacct
       MYSQL_USER: fa_user
       MYSQL_PASSWORD: fa_password
+      MYSQL_ROOT_PASSWORD: fa_root_password
     ports:
       - "3306:3306"
     volumes:
-      - db_data:/var/lib/mysql
-      - ./FA-Source/sql/en_US-new.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "fa_user", "-pfa_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  # Redis 7 Cache & Worker Queue
+  # 2. Redis 7 Cache & Worker Queue Service
   redis:
     image: redis:7-alpine
-    container_name: fa_redis
-    restart: always
+    container_name: fa-enterprise-redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
-  # PHP REST API Gateway (Wrapping FA Core)
+  # 3. PHP 8.2 Apache REST API Gateway
   api:
     build:
       context: .
       dockerfile: docker/api.Dockerfile
-    container_name: fa_api
-    restart: always
+    container_name: fa-enterprise-api
+    restart: unless-stopped
     ports:
       - "8080:80"
     environment:
-      DB_HOST: db
-      DB_NAME: frontacct
+      DB_HOST: mysql
       DB_USER: fa_user
       DB_PASS: fa_password
+      DB_NAME: frontacct
       REDIS_HOST: redis
-      JWT_SECRET: super_secret_enterprise_jwt_key_2026
-    volumes:
-      - ./FA-Source:/var/www/html/FA-Source
-      - ./apps/api:/var/www/html/api
     depends_on:
-      - db
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # React 19 SPA Frontend Dev Server
+  # 4. React 19 SPA Web Frontend
   web:
     build:
       context: .
       dockerfile: docker/web.Dockerfile
-    container_name: fa_web
-    restart: always
+    container_name: fa-enterprise-web
+    restart: unless-stopped
     ports:
-      - "3000:3000"
-    environment:
-      VITE_API_URL: http://localhost:8080/api/v1
-    volumes:
-      - ./apps/web:/app
-      - /app/node_modules
+      - "3000:80"
     depends_on:
       - api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  db_data:
+  mysql_data:

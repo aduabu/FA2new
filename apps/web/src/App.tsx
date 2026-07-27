@@ -44,6 +44,9 @@ import { PluginSDKPortal } from './components/platform/PluginSDKPortal';
 import { TenantManagementStudio } from './components/platform/TenantManagementStudio';
 import { ProductionReleaseStudio } from './components/platform/ProductionReleaseStudio';
 
+// Local Developer Status Dashboard
+import { LocalDevDashboardStudio } from './components/platform/LocalDevDashboardStudio';
+
 export function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [isCmdPaletteOpen, setIsCmdPaletteOpen] = useState(false);
@@ -51,6 +54,7 @@ export function App() {
   const getWorkspaceTitle = () => {
     switch (currentTab) {
       case 'dashboard': return 'Executive Control Center';
+      case 'dev-status': return 'Local Developer Status & Environment Dashboard';
       case 'plugin-sdk': return 'Public Developer Platform & Plugin SDK';
       case 'tenant-mgmt': return 'Multi-Tenant Operations & Tenant Provisioning';
       case 'v1-release': return 'Production Release Candidate 1 (v1.0.0-RC1)';
@@ -87,6 +91,8 @@ export function App() {
     switch (currentTab) {
       case 'dashboard':
         return <ExecutiveDashboard />;
+      case 'dev-status':
+        return <LocalDevDashboardStudio />;
       case 'plugin-sdk':
         return <PluginSDKPortal />;
       case 'tenant-mgmt':

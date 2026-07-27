@@ -26,7 +26,8 @@ import {
   Zap,
   Activity,
   Code,
-  Award
+  Award,
+  Terminal
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -40,6 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
       title: 'CONTROL CENTER',
       items: [
         { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
+        { id: 'dev-status', label: 'Local Dev & Environment', icon: Terminal },
         { id: 'v1-release', label: 'v1.0.0-RC1 Release Candidate', icon: Award },
         { id: 'ai-assistant', label: 'AI Assistant & Insights', icon: Sparkles },
         { id: 'trial-balance', label: 'Trial Balance Studio', icon: BarChart3 },
