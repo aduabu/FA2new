@@ -24,7 +24,9 @@ import {
   Cpu,
   Sparkles,
   Zap,
-  Activity
+  Activity,
+  Code,
+  Award
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -38,6 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
       title: 'CONTROL CENTER',
       items: [
         { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
+        { id: 'v1-release', label: 'v1.0.0 GA Release Candidate', icon: Award },
         { id: 'ai-assistant', label: 'AI Assistant & Insights', icon: Sparkles },
         { id: 'trial-balance', label: 'Trial Balance Studio', icon: BarChart3 },
         { id: 'integrity-tests', label: 'Accounting Integrity Suite', icon: ShieldCheck },
@@ -45,8 +48,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
       ]
     },
     {
-      title: 'INTEGRATIONS & EXTENSIONS',
+      title: 'DEVELOPER & TENANTS',
       items: [
+        { id: 'plugin-sdk', label: 'Plugin SDK & API Docs', icon: Code },
+        { id: 'tenant-mgmt', label: 'Multi-Tenant Operations', icon: Layers },
         { id: 'integrations', label: 'Webhooks & External API', icon: Zap },
       ]
     },
@@ -101,7 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
         </div>
         <div>
           <h1 className="font-semibold text-sm leading-none text-foreground">FrontAccounting</h1>
-          <span className="text-xs text-muted-foreground">Enterprise Platform v2.4</span>
+          <span className="text-xs text-muted-foreground">Enterprise Platform v1.0 GA</span>
         </div>
       </div>
 

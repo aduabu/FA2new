@@ -39,6 +39,11 @@ import { AIAssistantStudio } from './components/intelligence/AIAssistantStudio';
 import { IntegrationConnectorsStudio } from './components/intelligence/IntegrationConnectorsStudio';
 import { FullQASuiteStudio } from './components/intelligence/FullQASuiteStudio';
 
+// Phase 7 & 8 Developer Platform & Production Release Studios
+import { PluginSDKPortal } from './components/platform/PluginSDKPortal';
+import { TenantManagementStudio } from './components/platform/TenantManagementStudio';
+import { ProductionReleaseStudio } from './components/platform/ProductionReleaseStudio';
+
 export function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [isCmdPaletteOpen, setIsCmdPaletteOpen] = useState(false);
@@ -46,6 +51,9 @@ export function App() {
   const getWorkspaceTitle = () => {
     switch (currentTab) {
       case 'dashboard': return 'Executive Control Center';
+      case 'plugin-sdk': return 'Public Developer Platform & Plugin SDK';
+      case 'tenant-mgmt': return 'Multi-Tenant Operations & Tenant Provisioning';
+      case 'v1-release': return 'Production Release Candidate (v1.0.0 GA)';
       case 'ai-assistant': return 'Enterprise AI Assistant & Intelligent Search';
       case 'integrations': return 'Enterprise Integration Connectors & Webhooks';
       case 'qa-suite': return 'Full QA, E2E & Load Benchmark Suite';
@@ -79,6 +87,12 @@ export function App() {
     switch (currentTab) {
       case 'dashboard':
         return <ExecutiveDashboard />;
+      case 'plugin-sdk':
+        return <PluginSDKPortal />;
+      case 'tenant-mgmt':
+        return <TenantManagementStudio />;
+      case 'v1-release':
+        return <ProductionReleaseStudio />;
       case 'ai-assistant':
         return <AIAssistantStudio />;
       case 'integrations':
