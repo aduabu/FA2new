@@ -18,7 +18,10 @@ import {
   SlidersHorizontal,
   ShieldCheck,
   BarChart3,
-  Clock
+  Clock,
+  Factory,
+  CheckSquare,
+  Cpu
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -34,6 +37,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
         { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
         { id: 'trial-balance', label: 'Trial Balance Studio', icon: BarChart3 },
         { id: 'integrity-tests', label: 'Accounting Integrity Suite', icon: ShieldCheck },
+      ]
+    },
+    {
+      title: 'ENTERPRISE OPERATIONS',
+      items: [
+        { id: 'work-orders', label: 'Manufacturing & Work Orders', icon: Factory },
+        { id: 'fixed-assets', label: 'Fixed Assets Register', icon: Landmark },
+        { id: 'bank-rec', label: 'Bank Statement Reconciliation', icon: Landmark },
+        { id: 'approvals', label: 'Workflow & Approval Inbox', icon: CheckSquare },
+        { id: 'scheduler', label: 'Scheduler & Redis Workers', icon: Cpu },
       ]
     },
     {

@@ -27,6 +27,13 @@ import { TrialBalanceStudio } from './components/reporting/TrialBalanceStudio';
 import { AuditTrailStudio } from './components/reporting/AuditTrailStudio';
 import { AccountingIntegrityTestRunner } from './components/reporting/AccountingIntegrityTestRunner';
 
+// Phase 5 Enterprise Operations Studios
+import { WorkOrderStudio } from './components/enterprise/WorkOrderStudio';
+import { FixedAssetStudio } from './components/enterprise/FixedAssetStudio';
+import { BankReconciliationStudio } from './components/enterprise/BankReconciliationStudio';
+import { ApprovalInboxStudio } from './components/enterprise/ApprovalInboxStudio';
+import { SchedulerWorkerStudio } from './components/enterprise/SchedulerWorkerStudio';
+
 export function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [isCmdPaletteOpen, setIsCmdPaletteOpen] = useState(false);
@@ -34,6 +41,11 @@ export function App() {
   const getWorkspaceTitle = () => {
     switch (currentTab) {
       case 'dashboard': return 'Executive Control Center';
+      case 'work-orders': return 'Manufacturing & Work Order Studio';
+      case 'fixed-assets': return 'Fixed Assets Register & Depreciation';
+      case 'bank-rec': return 'Bank Statement Reconciliation Studio';
+      case 'approvals': return 'Workflow & Approval Task Inbox';
+      case 'scheduler': return 'Redis Background Queue Workers & Scheduler';
       case 'trial-balance': return 'Interactive Trial Balance Studio';
       case 'audit-trail': return 'Enterprise Audit Trail & Timeline';
       case 'integrity-tests': return 'Accounting Integrity Automated Test Suite';
@@ -59,6 +71,17 @@ export function App() {
     switch (currentTab) {
       case 'dashboard':
         return <ExecutiveDashboard />;
+      case 'work-orders':
+      case 'manufacturing':
+        return <WorkOrderStudio />;
+      case 'fixed-assets':
+        return <FixedAssetStudio />;
+      case 'bank-rec':
+        return <BankReconciliationStudio />;
+      case 'approvals':
+        return <ApprovalInboxStudio />;
+      case 'scheduler':
+        return <SchedulerWorkerStudio />;
       case 'trial-balance':
       case 'reporting':
         return <TrialBalanceStudio />;
@@ -80,7 +103,6 @@ export function App() {
       case 'banking':
         return <BankTransactionStudio />;
       case 'stock-adj':
-      case 'manufacturing':
         return <StockAdjustmentStudio />;
       case 'gl-journal':
         return <JournalEntryGrid />;
