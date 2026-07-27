@@ -15,8 +15,10 @@ import {
   Layers,
   DollarSign,
   PackageCheck,
-  ArrowRightLeft,
-  SlidersHorizontal
+  SlidersHorizontal,
+  ShieldCheck,
+  BarChart3,
+  Clock
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -30,10 +32,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
       title: 'CONTROL CENTER',
       items: [
         { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
+        { id: 'trial-balance', label: 'Trial Balance Studio', icon: BarChart3 },
+        { id: 'integrity-tests', label: 'Accounting Integrity Suite', icon: ShieldCheck },
       ]
     },
     {
-      title: 'TRANSACTION PROCESSING ENGINE',
+      title: 'TRANSACTION ENGINE',
       items: [
         { id: 'sales-order', label: 'Sales Orders & Quotes', icon: ShoppingCart },
         { id: 'sales-invoice', label: 'Sales Invoices', icon: FileText },
@@ -54,6 +58,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
         { id: 'taxes', label: 'Tax Types & Rates', icon: Percent },
         { id: 'currencies', label: 'Currencies & Rates', icon: Globe },
         { id: 'dimensions', label: 'Dimensions & Cost Centers', icon: Layers },
+      ]
+    },
+    {
+      title: 'AUDIT & GOVERNANCE',
+      items: [
+        { id: 'audit-trail', label: 'Enterprise Audit Trail', icon: Clock },
       ]
     }
   ];

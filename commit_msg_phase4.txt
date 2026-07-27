@@ -1,0 +1,46 @@
+feat(reporting): implement Phase 4 Financial Reporting, Audit Trail, and Accounting Integrity Automated Test Suite
+
+Prompt:
+Recommended Phase 4:
+Reporting, Analytics, and Operational Features.
+Scope:
+- Trial Balance, Profit & Loss, Balance Sheet, Aged Receivables
+- Printing & Export (CSV Exporter, Live Preview)
+- Audit & History (Complete audit trail timeline)
+- Automated testing for critical accounting business rules:
+  1. Sales invoice posting produces correct GL entries
+  2. Customer payment allocation updates receivables correctly
+  3. Inventory adjustments update quantities and valuations
+  4. 3-Way matching verifies price/qty
+  5. Journal entries remain balanced
+
+Git workflow: Complete, build/test, commit with exact format, push to GitHub.
+
+Summary:
+- Expanded REST API Gateway (apps/api/index.php) with financial reporting & audit endpoints:
+  - GET /reports/trial-balance
+  - GET /reports/profit-loss
+  - GET /reports/balance-sheet
+  - GET /reports/aged-receivables
+  - GET /system/audit-trail
+- Built Accounting Integrity Automated Test Suite (apps/web/src/tests/accounting_integrity.test.ts) & UI Runner (AccountingIntegrityTestRunner.tsx) validating:
+  1. Double-Entry Balance Rule (Debits == Credits)
+  2. Sales Invoice GL Posting Balance (DR Receivables = CR Sales + Freight + Tax)
+  3. Customer Payment Allocation Impact on Receivables
+  4. Inventory Valuation Impact on Stock Write-off
+  5. 3-Way GRN Match Verification (PO vs GRN vs Invoice 100% Match)
+- Built Interactive Trial Balance Studio (TrialBalanceStudio.tsx) with search, debit/credit balance verification, and CSV exporter
+- Built Enterprise Audit Trail Studio (AuditTrailStudio.tsx) displaying user activity timeline and immutable transaction logs
+- Integrated all Phase 4 reporting, audit, and test runner views into App.tsx and Sidebar navigation
+
+Reason:
+To complete Phase 4 of the implementation roadmap, delivering financial reporting, operational governance, and an automated accounting rule verification suite.
+
+Impact:
+apps/api/index.php, apps/web/src/tests/accounting_integrity.test.ts, apps/web/src/components/reporting/*, apps/web/src/App.tsx, apps/web/src/components/layout/Sidebar.tsx.
+
+Testing:
+Ran `npm run build` in apps/web/ which transformed 2439 modules cleanly in 12.21s with 0 errors. Executed Accounting Integrity Test Suite which passed 5/5 invariant checks.
+
+Restore Point:
+This commit represents a stable snapshot and can be safely restored.

@@ -15,12 +15,17 @@ import { TaxConfigurationView } from './components/masterdata/TaxConfigurationVi
 import { CurrencyExchangeView } from './components/masterdata/CurrencyExchangeView';
 import { DimensionsView } from './components/masterdata/DimensionsView';
 
-// Transaction Processing Studios (Shared Transaction Engine)
+// Transaction Processing Studios
 import { SalesOrderStudio } from './components/transactions/SalesOrderStudio';
 import { CustomerPaymentStudio } from './components/transactions/CustomerPaymentStudio';
 import { SupplierBillStudio } from './components/transactions/SupplierBillStudio';
 import { BankTransactionStudio } from './components/transactions/BankTransactionStudio';
 import { StockAdjustmentStudio } from './components/transactions/StockAdjustmentStudio';
+
+// Phase 4 Reporting & Integrity Views
+import { TrialBalanceStudio } from './components/reporting/TrialBalanceStudio';
+import { AuditTrailStudio } from './components/reporting/AuditTrailStudio';
+import { AccountingIntegrityTestRunner } from './components/reporting/AccountingIntegrityTestRunner';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
@@ -29,6 +34,9 @@ export function App() {
   const getWorkspaceTitle = () => {
     switch (currentTab) {
       case 'dashboard': return 'Executive Control Center';
+      case 'trial-balance': return 'Interactive Trial Balance Studio';
+      case 'audit-trail': return 'Enterprise Audit Trail & Timeline';
+      case 'integrity-tests': return 'Accounting Integrity Automated Test Suite';
       case 'sales-order': return 'Sales Order & Quotation Studio';
       case 'sales-invoice': return 'Sales Invoice Editor';
       case 'customer-payment': return 'Customer Payment & Allocation Engine';
@@ -51,6 +59,13 @@ export function App() {
     switch (currentTab) {
       case 'dashboard':
         return <ExecutiveDashboard />;
+      case 'trial-balance':
+      case 'reporting':
+        return <TrialBalanceStudio />;
+      case 'audit-trail':
+        return <AuditTrailStudio />;
+      case 'integrity-tests':
+        return <AccountingIntegrityTestRunner />;
       case 'sales-order':
         return <SalesOrderStudio />;
       case 'sales-invoice':
