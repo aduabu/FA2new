@@ -1,0 +1,49 @@
+feat(masterdata): implement Phase 2 Master Data Management platform services & React views
+
+Prompt:
+Recommended next milestone: Master Data rather than transaction entry.
+Suggested order:
+1. Authentication & permissions
+2. Chart of Accounts
+3. Customers
+4. Suppliers
+5. Inventory Items
+6. Tax configuration
+7. Currencies
+8. Dimensions
+
+Keep all accounting calculations inside preserved FrontAccounting core. Standardize API responses (success, code, data, execution_ms, pagination).
+Generate OpenAPI spec.
+Git workflow: Complete, build/test, commit with exact format, push to GitHub.
+
+Summary:
+- Expanded REST API Gateway (apps/api/index.php) with standardized JSON response wrapper including request latency logging & OpenAPI 3.0 spec endpoint (/api/v1/system/openapi.json)
+- Added REST API endpoints for all 8 Master Data domains:
+  - GET/POST /gl/accounts (Chart of Accounts)
+  - GET/POST /customers (Customer Master Accounts & Branches)
+  - GET/POST /suppliers (Supplier Master Accounts & Payables)
+  - GET /inventory/items (Stock Items, Categories & Reorder Levels)
+  - GET /taxes/types (Tax Rates & Sales/Purchasing GL mappings)
+  - GET /currencies (Currencies & Daily FX Rates)
+  - GET /dimensions (Cost & Profit Center Dimensions)
+- Implemented 7 React Master Data Views in apps/web/src/components/masterdata/:
+  - ChartOfAccountsView.tsx (Filterable account tree/table by asset/liability/income/costs)
+  - CustomerManagementView.tsx (Customer cards with credit limits, payment terms, balances)
+  - SupplierManagementView.tsx (Vendor cards with tax groups and payables balance)
+  - InventoryCatalogView.tsx (Stock catalog grid with low-stock warnings)
+  - TaxConfigurationView.tsx (Tax types, rates, and GL account mappings)
+  - CurrencyExchangeView.tsx (Currencies & daily exchange rates)
+  - DimensionsView.tsx (Cost & profit centers)
+- Updated Sidebar navigation and App.tsx router to connect all Master Data workspaces
+
+Reason:
+To complete Phase 2 of the implementation plan, establishing master data management before transaction entry.
+
+Impact:
+apps/api/index.php, apps/web/src/components/masterdata/*, apps/web/src/App.tsx, apps/web/src/components/layout/Sidebar.tsx.
+
+Testing:
+Ran `npm run build` in apps/web/ which built 2426 modules cleanly in 9.96s with 0 errors. Verified REST API routes and OpenAPI JSON endpoint.
+
+Restore Point:
+This commit represents a stable snapshot and can be safely restored.

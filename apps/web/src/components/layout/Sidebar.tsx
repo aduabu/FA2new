@@ -10,8 +10,10 @@ import {
   FileText, 
   Settings, 
   ChevronRight,
-  Star,
-  Clock
+  Users,
+  Percent,
+  Globe,
+  Layers
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -22,24 +24,30 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => {
   const menuGroups = [
     {
-      title: 'FAVORITES',
+      title: 'DASHBOARD & TRANSACTIONS',
       items: [
-        { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
+        { id: 'dashboard', label: 'Executive Control Center', icon: LayoutDashboard },
         { id: 'sales-invoice', label: 'Sales Invoices', icon: ShoppingCart },
-        { id: 'gl-journal', label: 'Journal Entry', icon: BookOpen },
+        { id: 'gl-journal', label: 'Manual Journal Entry', icon: BookOpen },
       ]
     },
     {
-      title: 'MODULES',
+      title: 'MASTER DATA PLATFORM',
       items: [
-        { id: 'sales', label: 'Sales & AR', icon: ShoppingCart },
-        { id: 'purchasing', label: 'Purchasing & AP', icon: Package },
-        { id: 'inventory', label: 'Inventory & Items', icon: Boxes },
-        { id: 'manufacturing', label: 'Manufacturing', icon: Factory },
-        { id: 'banking', label: 'Banking & Cash', icon: Landmark },
-        { id: 'gl', label: 'General Ledger', icon: BookOpen },
-        { id: 'reporting', label: 'Reports & BI', icon: FileText },
-        { id: 'setup', label: 'System Setup', icon: Settings },
+        { id: 'chart-accounts', label: 'Chart of Accounts (GL)', icon: BookOpen },
+        { id: 'customers', label: 'Customer Accounts', icon: Users },
+        { id: 'suppliers', label: 'Supplier Vendors', icon: Package },
+        { id: 'inventory', label: 'Inventory Items Catalog', icon: Boxes },
+        { id: 'taxes', label: 'Tax Types & Rates', icon: Percent },
+        { id: 'currencies', label: 'Currencies & Rates', icon: Globe },
+        { id: 'dimensions', label: 'Dimensions & Cost Centers', icon: Layers },
+      ]
+    },
+    {
+      title: 'SYSTEM MODULES',
+      items: [
+        { id: 'reporting', label: 'Reports & BI Studio', icon: FileText },
+        { id: 'setup', label: 'System Administration', icon: Settings },
       ]
     }
   ];
@@ -58,7 +66,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
       </div>
 
       {/* Navigation List */}
-      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+      <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
         {menuGroups.map((group, idx) => (
           <div key={idx} className="space-y-1">
             <h2 className="px-3 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
