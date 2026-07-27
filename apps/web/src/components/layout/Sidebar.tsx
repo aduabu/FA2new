@@ -4,7 +4,6 @@ import {
   ShoppingCart, 
   Package, 
   Boxes, 
-  Factory, 
   Landmark, 
   BookOpen, 
   FileText, 
@@ -13,7 +12,11 @@ import {
   Users,
   Percent,
   Globe,
-  Layers
+  Layers,
+  DollarSign,
+  PackageCheck,
+  ArrowRightLeft,
+  SlidersHorizontal
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -24,11 +27,21 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => {
   const menuGroups = [
     {
-      title: 'DASHBOARD & TRANSACTIONS',
+      title: 'CONTROL CENTER',
       items: [
-        { id: 'dashboard', label: 'Executive Control Center', icon: LayoutDashboard },
-        { id: 'sales-invoice', label: 'Sales Invoices', icon: ShoppingCart },
-        { id: 'gl-journal', label: 'Manual Journal Entry', icon: BookOpen },
+        { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
+      ]
+    },
+    {
+      title: 'TRANSACTION PROCESSING ENGINE',
+      items: [
+        { id: 'sales-order', label: 'Sales Orders & Quotes', icon: ShoppingCart },
+        { id: 'sales-invoice', label: 'Sales Invoices', icon: FileText },
+        { id: 'customer-payment', label: 'Customer Payments & Alloc', icon: DollarSign },
+        { id: 'supplier-bill', label: 'Supplier Bills & 3-Way GRN', icon: PackageCheck },
+        { id: 'bank-trans', label: 'Bank Payments & Transfers', icon: Landmark },
+        { id: 'gl-journal', label: 'Manual Journal Entries', icon: BookOpen },
+        { id: 'stock-adj', label: 'Stock Adjustments & Audit', icon: SlidersHorizontal },
       ]
     },
     {
@@ -41,13 +54,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
         { id: 'taxes', label: 'Tax Types & Rates', icon: Percent },
         { id: 'currencies', label: 'Currencies & Rates', icon: Globe },
         { id: 'dimensions', label: 'Dimensions & Cost Centers', icon: Layers },
-      ]
-    },
-    {
-      title: 'SYSTEM MODULES',
-      items: [
-        { id: 'reporting', label: 'Reports & BI Studio', icon: FileText },
-        { id: 'setup', label: 'System Administration', icon: Settings },
       ]
     }
   ];

@@ -15,6 +15,13 @@ import { TaxConfigurationView } from './components/masterdata/TaxConfigurationVi
 import { CurrencyExchangeView } from './components/masterdata/CurrencyExchangeView';
 import { DimensionsView } from './components/masterdata/DimensionsView';
 
+// Transaction Processing Studios (Shared Transaction Engine)
+import { SalesOrderStudio } from './components/transactions/SalesOrderStudio';
+import { CustomerPaymentStudio } from './components/transactions/CustomerPaymentStudio';
+import { SupplierBillStudio } from './components/transactions/SupplierBillStudio';
+import { BankTransactionStudio } from './components/transactions/BankTransactionStudio';
+import { StockAdjustmentStudio } from './components/transactions/StockAdjustmentStudio';
+
 export function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [isCmdPaletteOpen, setIsCmdPaletteOpen] = useState(false);
@@ -22,7 +29,12 @@ export function App() {
   const getWorkspaceTitle = () => {
     switch (currentTab) {
       case 'dashboard': return 'Executive Control Center';
+      case 'sales-order': return 'Sales Order & Quotation Studio';
       case 'sales-invoice': return 'Sales Invoice Editor';
+      case 'customer-payment': return 'Customer Payment & Allocation Engine';
+      case 'supplier-bill': return 'Supplier Bill & 3-Way Match Studio';
+      case 'bank-trans': return 'Bank Payment & Inter-Bank Transfer';
+      case 'stock-adj': return 'Stock Adjustment & Valuation Studio';
       case 'gl-journal': return 'Manual Journal Entry Studio';
       case 'chart-accounts': return 'Chart of Accounts (GL Master)';
       case 'customers': return 'Customer Accounts & Branches';
@@ -31,13 +43,6 @@ export function App() {
       case 'taxes': return 'Tax Types & Configurations';
       case 'currencies': return 'Currencies & Foreign Exchange Rates';
       case 'dimensions': return 'Cost & Profit Center Dimensions';
-      case 'sales': return 'Sales & Accounts Receivable';
-      case 'purchasing': return 'Purchasing & Accounts Payable';
-      case 'manufacturing': return 'Manufacturing & Work Orders';
-      case 'banking': return 'Banking & Cash Management';
-      case 'gl': return 'General Ledger Management';
-      case 'reporting': return 'Financial Reports & Analytics';
-      case 'setup': return 'System Administration & Setup';
       default: return 'Executive Control Center';
     }
   };
@@ -46,9 +51,22 @@ export function App() {
     switch (currentTab) {
       case 'dashboard':
         return <ExecutiveDashboard />;
+      case 'sales-order':
+        return <SalesOrderStudio />;
       case 'sales-invoice':
       case 'sales':
         return <SalesInvoiceEditor />;
+      case 'customer-payment':
+        return <CustomerPaymentStudio />;
+      case 'supplier-bill':
+      case 'purchasing':
+        return <SupplierBillStudio />;
+      case 'bank-trans':
+      case 'banking':
+        return <BankTransactionStudio />;
+      case 'stock-adj':
+      case 'manufacturing':
+        return <StockAdjustmentStudio />;
       case 'gl-journal':
         return <JournalEntryGrid />;
       case 'chart-accounts':
@@ -57,15 +75,12 @@ export function App() {
       case 'customers':
         return <CustomerManagementView />;
       case 'suppliers':
-      case 'purchasing':
         return <SupplierManagementView />;
       case 'inventory':
-      case 'manufacturing':
         return <InventoryCatalogView />;
       case 'taxes':
         return <TaxConfigurationView />;
       case 'currencies':
-      case 'banking':
         return <CurrencyExchangeView />;
       case 'dimensions':
         return <DimensionsView />;
