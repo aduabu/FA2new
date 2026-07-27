@@ -34,6 +34,11 @@ import { BankReconciliationStudio } from './components/enterprise/BankReconcilia
 import { ApprovalInboxStudio } from './components/enterprise/ApprovalInboxStudio';
 import { SchedulerWorkerStudio } from './components/enterprise/SchedulerWorkerStudio';
 
+// Phase 6 Enterprise Intelligence & QA Studios
+import { AIAssistantStudio } from './components/intelligence/AIAssistantStudio';
+import { IntegrationConnectorsStudio } from './components/intelligence/IntegrationConnectorsStudio';
+import { FullQASuiteStudio } from './components/intelligence/FullQASuiteStudio';
+
 export function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [isCmdPaletteOpen, setIsCmdPaletteOpen] = useState(false);
@@ -41,6 +46,9 @@ export function App() {
   const getWorkspaceTitle = () => {
     switch (currentTab) {
       case 'dashboard': return 'Executive Control Center';
+      case 'ai-assistant': return 'Enterprise AI Assistant & Intelligent Search';
+      case 'integrations': return 'Enterprise Integration Connectors & Webhooks';
+      case 'qa-suite': return 'Full QA, E2E & Load Benchmark Suite';
       case 'work-orders': return 'Manufacturing & Work Order Studio';
       case 'fixed-assets': return 'Fixed Assets Register & Depreciation';
       case 'bank-rec': return 'Bank Statement Reconciliation Studio';
@@ -71,6 +79,12 @@ export function App() {
     switch (currentTab) {
       case 'dashboard':
         return <ExecutiveDashboard />;
+      case 'ai-assistant':
+        return <AIAssistantStudio />;
+      case 'integrations':
+        return <IntegrationConnectorsStudio />;
+      case 'qa-suite':
+        return <FullQASuiteStudio />;
       case 'work-orders':
       case 'manufacturing':
         return <WorkOrderStudio />;

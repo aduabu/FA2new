@@ -21,7 +21,10 @@ import {
   Clock,
   Factory,
   CheckSquare,
-  Cpu
+  Cpu,
+  Sparkles,
+  Zap,
+  Activity
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -35,8 +38,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
       title: 'CONTROL CENTER',
       items: [
         { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
+        { id: 'ai-assistant', label: 'AI Assistant & Insights', icon: Sparkles },
         { id: 'trial-balance', label: 'Trial Balance Studio', icon: BarChart3 },
         { id: 'integrity-tests', label: 'Accounting Integrity Suite', icon: ShieldCheck },
+        { id: 'qa-suite', label: 'Full QA & Load Benchmark', icon: Activity },
+      ]
+    },
+    {
+      title: 'INTEGRATIONS & EXTENSIONS',
+      items: [
+        { id: 'integrations', label: 'Webhooks & External API', icon: Zap },
       ]
     },
     {
