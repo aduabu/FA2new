@@ -53,7 +53,7 @@ export function App() {
       case 'dashboard': return 'Executive Control Center';
       case 'plugin-sdk': return 'Public Developer Platform & Plugin SDK';
       case 'tenant-mgmt': return 'Multi-Tenant Operations & Tenant Provisioning';
-      case 'v1-release': return 'Production Release Candidate (v1.0.0 GA)';
+      case 'v1-release': return 'Production Release Candidate 1 (v1.0.0-RC1)';
       case 'ai-assistant': return 'Enterprise AI Assistant & Intelligent Search';
       case 'integrations': return 'Enterprise Integration Connectors & Webhooks';
       case 'qa-suite': return 'Full QA, E2E & Load Benchmark Suite';

@@ -40,7 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
       title: 'CONTROL CENTER',
       items: [
         { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
-        { id: 'v1-release', label: 'v1.0.0 GA Release Candidate', icon: Award },
+        { id: 'v1-release', label: 'v1.0.0-RC1 Release Candidate', icon: Award },
         { id: 'ai-assistant', label: 'AI Assistant & Insights', icon: Sparkles },
         { id: 'trial-balance', label: 'Trial Balance Studio', icon: BarChart3 },
         { id: 'integrity-tests', label: 'Accounting Integrity Suite', icon: ShieldCheck },
@@ -106,7 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onTabChange }) => 
         </div>
         <div>
           <h1 className="font-semibold text-sm leading-none text-foreground">FrontAccounting</h1>
-          <span className="text-xs text-muted-foreground">Enterprise Platform v1.0 GA</span>
+          <span className="text-xs text-muted-foreground">Platform v1.0.0-RC1</span>
         </div>
       </div>
 
