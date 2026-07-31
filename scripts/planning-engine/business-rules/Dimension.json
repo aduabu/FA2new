@@ -1,0 +1,47 @@
+{
+  "module": "Dimension",
+  "requiredBusinessCapabilities": [
+    {
+      "id": "COA-001",
+      "name": "Create Dimension / Account",
+      "mandatory": true,
+      "description": "System must create new cost center dimensions and GL accounts with unique references.",
+      "codePattern": "createDimension"
+    },
+    {
+      "id": "COA-002",
+      "name": "Edit Account / Dimension Name",
+      "mandatory": true,
+      "description": "System must allow editing the dimension name while preserving historical transaction history.",
+      "codePattern": "updateDimension"
+    },
+    {
+      "id": "COA-003",
+      "name": "Edit Account / Dimension Code",
+      "mandatory": true,
+      "description": "System must allow editing business reference codes after validating no duplicate exists.",
+      "codePattern": "reference"
+    },
+    {
+      "id": "COA-005",
+      "name": "Archive Dimension / Account",
+      "mandatory": true,
+      "description": "Soft archive (closed = 1) cost center dimensions while maintaining audit trail.",
+      "codePattern": "archiveDimension"
+    },
+    {
+      "id": "COA-006",
+      "name": "Restore Dimension / Account",
+      "mandatory": true,
+      "description": "Re-activate archived cost center dimensions (closed = 0).",
+      "codePattern": "restoreDimension"
+    },
+    {
+      "id": "COA-010",
+      "name": "Audit Trail Structural Changes",
+      "mandatory": true,
+      "description": "Log all structural dimension and GL account code/name modifications in 0_audit_trail.",
+      "codePattern": "logAudit"
+    }
+  ]
+}

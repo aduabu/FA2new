@@ -2,24 +2,34 @@ import React, { useState } from 'react';
 import { DocHeader } from './shared/DocHeader';
 import { PartySelector } from './shared/PartySelector';
 import { GLPostingPreviewModal } from './shared/GLPostingPreviewModal';
-import { CheckCircle2, ShieldAlert, PackageCheck, Plus, Trash2, Save } from 'lucide-react';
+import { CheckCircle2, PackageCheck, Save } from 'lucide-react';
+import { apiClient } from '../../utils/apiClient';
+import { API_ENDPOINTS } from '../../config/apiEndpoints';
 
-export const SupplierBillStudio: React.FC = () => {
-  const [supplier, setSupplier] = useState('1');
+interface Props {
+  initialSupplier?: string;
+  initialItemCode?: string;
+  onNavigate?: (tab: string, payload?: any) => void;
+}
+
+export const SupplierBillStudio: React.FC<Props> = ({ initialSupplier, initialItemCode }) => {
+  const [supplier, setSupplier] = useState(initialSupplier || '1');
   const [ref, setRef] = useState('BILL-2026-0051');
   const [suppRef, setSuppRef] = useState('INV-SUPP-9921');
   const [docDate, setDocDate] = useState('2026-07-27');
   const [dueDate, setDueDate] = useState('2026-08-27');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const suppliers = [
     { id: '1', name: 'Industrial Components Co', ref: 'INDCOMP', address: '780 Industrial Blvd, Detroit MI', currency: 'USD' },
     { id: '2', name: 'Tech Hardware Solutions', ref: 'TECHHARD', address: '1200 Innovation Dr, San Jose CA', currency: 'USD' },
+    { id: '3', name: 'Raw Materials Supplier Corp', ref: 'RAWMAT', address: '12 Logistics Blvd', currency: 'USD' },
   ];
 
   const [lines, setLines] = useState([
-    { id: '1', grnRef: 'GRN-2026-0012', itemCode: 'ITEM-A100', name: 'Industrial Widget A', qty: 20, poPrice: 85.00, billPrice: 85.00 },
+    { id: '1', grnRef: 'GRN-2026-0012', itemCode: initialItemCode || 'ITEM-A100', name: 'Industrial Widget A', qty: 20, poPrice: 85.00, billPrice: 85.00 },
   ]);
 
   const subtotal = lines.reduce((sum, l) => sum + (l.qty * l.billPrice), 0);
@@ -29,17 +39,46 @@ export const SupplierBillStudio: React.FC = () => {
   const postings = [
     { accountCode: '1510', accountName: 'Inventory Clearing / GRN Account', debit: subtotal, credit: 0 },
     { accountCode: '2150', accountName: 'Sales Tax (GST) Input Credit', debit: tax, credit: 0 },
-    { accountCode: '2100', accountName: 'Accounts Payable (Industrial Components)', debit: 0, credit: grandTotal },
+    { accountCode: '2100', accountName: 'Accounts Payable (Supplier Payables)', debit: 0, credit: grandTotal },
   ];
+
+  const handleConfirmPost = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        memo: `Supplier Bill ${ref} / Inv ${suppRef} for supplier #${supplier}`,
+        ref: ref,
+        date: docDate,
+        lines: [
+          { account_code: '1510', account_name: 'Inventory Clearing / GRN', debit: subtotal, credit: 0 },
+          { account_code: '2150', account_name: 'Sales Tax (GST) Input Credit', debit: tax, credit: 0 },
+          { account_code: '2100', account_name: 'Accounts Payable', debit: 0, credit: grandTotal }
+        ]
+      };
+
+      const res = await apiClient.post(API_ENDPOINTS.GL.JOURNALS, payload);
+      setLoading(false);
+
+      if (res.success) {
+        setIsPreviewOpen(false);
+        setIsPosted(true);
+      } else {
+        alert(res.message || 'Failed to post supplier bill');
+      }
+    } catch (e: any) {
+      setLoading(false);
+      alert(`Error connecting to REST API Gateway: ${e.message}`);
+    }
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {isPosted && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center gap-3 shadow-lg">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center gap-3 shadow-lg animate-in fade-in">
           <CheckCircle2 className="w-5 h-5" />
           <div>
             <div className="font-semibold text-sm">Supplier Bill Posted & 3-Way GRN Matched</div>
-            <div className="text-xs opacity-80">Reference: {ref} — Posted to AP Ledger via FA Core Engine</div>
+            <div className="text-xs opacity-90 font-mono">Reference: {ref} | Supp Ref: {suppRef} | Posted to AP Ledger via FA Core Engine</div>
           </div>
         </div>
       )}
@@ -138,7 +177,7 @@ export const SupplierBillStudio: React.FC = () => {
       <GLPostingPreviewModal
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
-        onConfirmPost={() => setIsPosted(true)}
+        onConfirmPost={handleConfirmPost}
         documentTitle="Supplier Bill & AP Posting"
         reference={ref}
         postings={postings}

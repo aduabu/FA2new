@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import { DocHeader } from './shared/DocHeader';
 import { GLPostingPreviewModal } from './shared/GLPostingPreviewModal';
-import { Boxes, Plus, Trash2, CheckCircle2, Save, ArrowRightLeft } from 'lucide-react';
+import { Boxes, Plus, Trash2, CheckCircle2, Save } from 'lucide-react';
+import { apiClient } from '../../utils/apiClient';
+import { API_ENDPOINTS } from '../../config/apiEndpoints';
 
-export const StockAdjustmentStudio: React.FC = () => {
+interface Props {
+  initialItemCode?: string;
+  onNavigate?: (tab: string, payload?: any) => void;
+}
+
+export const StockAdjustmentStudio: React.FC<Props> = ({ initialItemCode }) => {
   const [ref, setRef] = useState('ADJ-2026-0014');
   const [docDate, setDocDate] = useState('2026-07-27');
   const [location, setLocation] = useState('DEF');
   const [reason, setReason] = useState('Damaged stock write-off / Physical audit difference');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [lines, setLines] = useState([
-    { id: '1', code: 'ITEM-A100', name: 'Industrial Widget A', qtyChange: -2, unitCost: 85.00 },
+    { id: '1', code: initialItemCode || 'ITEM-A100', name: 'Industrial Widget A', qtyChange: -2, unitCost: 85.00 },
   ]);
 
   const totalAdjustmentValue = lines.reduce((sum, l) => sum + (l.qtyChange * l.unitCost), 0);
@@ -22,14 +30,44 @@ export const StockAdjustmentStudio: React.FC = () => {
     { accountCode: '1510', accountName: 'Inventory Asset Account', debit: 0, credit: Math.abs(totalAdjustmentValue) },
   ];
 
+  const handleConfirmPost = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        memo: `Stock Adjustment (${ref}): ${reason}`,
+        ref: ref,
+        date: docDate,
+        lines: postings.map(p => ({
+          account_code: p.accountCode,
+          account_name: p.accountName,
+          debit: p.debit,
+          credit: p.credit
+        }))
+      };
+
+      const res = await apiClient.post(API_ENDPOINTS.GL.JOURNALS, payload);
+      setLoading(false);
+
+      if (res.success) {
+        setIsPreviewOpen(false);
+        setIsPosted(true);
+      } else {
+        alert(res.message || 'Failed to post stock adjustment');
+      }
+    } catch (e: any) {
+      setLoading(false);
+      alert(`Error connecting to REST API Gateway: ${e.message}`);
+    }
+  };
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {isPosted && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center gap-3 shadow-lg">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center gap-3 shadow-lg animate-in fade-in">
           <CheckCircle2 className="w-5 h-5" />
           <div>
-            <div className="font-semibold text-sm">Stock Adjustment Posted & Inventory Updated</div>
-            <div className="text-xs opacity-80">Reference: {ref} — Posted to 0_stock_moves & 0_gl_trans via FA Core</div>
+            <div className="font-semibold text-sm">Stock Adjustment Posted & Inventory Updated via FrontAccounting Engine!</div>
+            <div className="text-xs opacity-90 font-mono">Reference: {ref} — Posted to 0_stock_moves & 0_gl_trans via FA Core</div>
           </div>
         </div>
       )}
@@ -132,7 +170,7 @@ export const StockAdjustmentStudio: React.FC = () => {
       <GLPostingPreviewModal
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
-        onConfirmPost={() => setIsPosted(true)}
+        onConfirmPost={handleConfirmPost}
         documentTitle="Stock Adjustment & Valuation Impact"
         reference={ref}
         postings={postings}

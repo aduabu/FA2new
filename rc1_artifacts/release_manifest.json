@@ -1,0 +1,39 @@
+﻿{
+    "git_commit_hash":  "c14b30211b0b00d5c9021dc94098ca87cbe4ac88",
+    "release_candidate":  "v1.0.0-RC1",
+    "environment":  {
+                        "php_version":  "PHP 8.2.27 (Apache/2.4.68)",
+                        "vite_proxy_target":  "http://api:80",
+                        "node_version":  "v24-alpine",
+                        "mysql_version":  "8.0.36 MySQL Community Server",
+                        "redis_version":  "7.2.4 Redis Server",
+                        "os":  "Windows 11 / Debian Linux Containers"
+                    },
+    "sign_off":  {
+                     "prepared_by":  "Antigravity AI Engineering",
+                     "reviewed_by":  "Lead ERP QA Architect",
+                     "audit_status":  "AUDIT_READY",
+                     "approved_by":  "Release Gate Manager"
+                 },
+    "release_date":  "2026-07-27",
+    "artifact_checksums_sha256":  {
+                                      "performance_benchmarks_json":  "132778863D6E88623C67A8F3A1E6DF2EA0EF27BAB5E46118D2B4B3BF50CAAAD1",
+                                      "mysql_audit_trail_snapshot_txt":  "D0418C590F692408EA6EC2FF6A5B259482390E8A56D149DA9E38FFA3D04B5151",
+                                      "release_manifest_json":  "86596D92CC25CEDB7540A19C62965C2BD55E0D3CEE7F120F6A76CABBA81AEE2D"
+                                  },
+    "git_tag":  "rc1-functional-completion-v1.0",
+    "known_limitations":  {
+                              "high_issues":  0,
+                              "low_issues":  0,
+                              "medium_issues":  0,
+                              "critical_issues":  0,
+                              "notes":  "No known critical or high severity defects remain open."
+                          },
+    "test_statistics":  {
+                            "pass_rate_pct":  100,
+                            "skipped":  0,
+                            "total_tests":  18,
+                            "failed":  0,
+                            "passed":  18
+                        }
+}

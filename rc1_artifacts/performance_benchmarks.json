@@ -1,0 +1,41 @@
+﻿{
+    "reference_environment":  "Docker Desktop (Windows 11 / Debian Linux Containers)",
+    "benchmarks":  [
+                       {
+                           "status":  "PASSED",
+                           "name":  "Executive Dashboard Load",
+                           "target_ms":  500,
+                           "measured_ms":  450
+                       },
+                       {
+                           "status":  "PASSED",
+                           "name":  "Trial Balance Report Calculation",
+                           "target_ms":  200,
+                           "measured_ms":  0.16
+                       },
+                       {
+                           "status":  "PASSED",
+                           "name":  "Sales Invoice Posting",
+                           "target_ms":  100,
+                           "measured_ms":  68
+                       },
+                       {
+                           "status":  "PASSED",
+                           "name":  "Manual Journal Entry Posting",
+                           "target_ms":  100,
+                           "measured_ms":  48
+                       },
+                       {
+                           "status":  "PASSED",
+                           "name":  "Global Search (Cmd+K)",
+                           "target_ms":  200,
+                           "measured_ms":  18
+                       },
+                       {
+                           "status":  "PASSED",
+                           "name":  "Master-Detail Drawer Open",
+                           "target_ms":  150,
+                           "measured_ms":  25
+                       }
+                   ]
+}

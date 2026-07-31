@@ -3,9 +3,13 @@ import { DocHeader } from './shared/DocHeader';
 import { DocStatusBar } from './shared/DocStatusBar';
 import { PartySelector } from './shared/PartySelector';
 import { GLPostingPreviewModal } from './shared/GLPostingPreviewModal';
-import { Plus, Trash2, Save, Send, CheckCircle2 } from 'lucide-react';
+import { Plus, Trash2, Send, CheckCircle2 } from 'lucide-react';
 
-export const SalesOrderStudio: React.FC = () => {
+interface Props {
+  onNavigate?: (tab: string, payload?: any) => void;
+}
+
+export const SalesOrderStudio: React.FC<Props> = ({ onNavigate }) => {
   const [currentStep, setCurrentStep] = useState('SO');
   const [customer, setCustomer] = useState('1');
   const [ref, setRef] = useState('SO-2026-0094');

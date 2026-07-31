@@ -12,7 +12,7 @@ services:
       MYSQL_PASSWORD: fa_password
       MYSQL_ROOT_PASSWORD: fa_root_password
     ports:
-      - "3306:3306"
+      - "${PORT_DB:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -49,6 +49,8 @@ services:
       DB_PASS: fa_password
       DB_NAME: frontacct
       REDIS_HOST: redis
+    volumes:
+      - .:/var/www/html
     depends_on:
       mysql:
         condition: service_healthy
@@ -68,11 +70,13 @@ services:
     container_name: fa-enterprise-web
     restart: unless-stopped
     ports:
-      - "3000:80"
+      - "3000:3000"
+    environment:
+      VITE_API_TARGET: "http://api:80"
     depends_on:
       - api
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
       interval: 10s
       timeout: 5s
       retries: 5

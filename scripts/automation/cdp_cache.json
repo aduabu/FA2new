@@ -1,0 +1,5 @@
+{
+  "endpoint": "http://[::1]:9222",
+  "websocket_url": "ws://[::1]:9222/devtools/browser/3e1c3ffb-a52d-4df1-b8fd-7b80d30fe157",
+  "timestamp": "2026-07-27T23:34:22Z"
+}

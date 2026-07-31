@@ -2,20 +2,29 @@ import React, { useState } from 'react';
 import { DocHeader } from './shared/DocHeader';
 import { PartySelector } from './shared/PartySelector';
 import { GLPostingPreviewModal } from './shared/GLPostingPreviewModal';
-import { DollarSign, CheckCircle2, Link2, Scale } from 'lucide-react';
+import { DollarSign, CheckCircle2, Link2 } from 'lucide-react';
+import { apiClient } from '../../utils/apiClient';
+import { API_ENDPOINTS } from '../../config/apiEndpoints';
 
-export const CustomerPaymentStudio: React.FC = () => {
-  const [customer, setCustomer] = useState('1');
+interface Props {
+  initialCustomer?: string;
+  onNavigate?: (tab: string, payload?: any) => void;
+}
+
+export const CustomerPaymentStudio: React.FC<Props> = ({ initialCustomer }) => {
+  const [customer, setCustomer] = useState(initialCustomer || '1');
   const [ref, setRef] = useState('REM-2026-0031');
   const [docDate, setDocDate] = useState('2026-07-27');
   const [paymentAmount, setPaymentAmount] = useState(2645.50);
   const [bankAccount, setBankAccount] = useState('1060');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const customers = [
     { id: '1', name: 'Acme Global Logistics', ref: 'ACME01', address: '100 Logistics Way, Chicago IL', currency: 'USD', creditLimit: 50000 },
     { id: '2', name: 'Apex Systems Inc', ref: 'APEX02', address: '450 Tech Pkwy, Austin TX', currency: 'USD', creditLimit: 25000 },
+    { id: '3', name: 'Global Enterprise Client', ref: 'CUST-03', address: '500 High St', currency: 'USD', creditLimit: 75000 },
   ];
 
   const openInvoices = [
@@ -25,17 +34,45 @@ export const CustomerPaymentStudio: React.FC = () => {
 
   const postings = [
     { accountCode: bankAccount, accountName: 'Current Bank Account', debit: paymentAmount, credit: 0 },
-    { accountCode: '1200', accountName: 'Accounts Receivable (Acme Global)', debit: 0, credit: paymentAmount },
+    { accountCode: '1200', accountName: 'Accounts Receivable (Customer Receivables)', debit: 0, credit: paymentAmount },
   ];
+
+  const handleConfirmPost = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        memo: `Customer Payment Receipt ${ref} for debtor #${customer}`,
+        ref: ref,
+        date: docDate,
+        lines: [
+          { account_code: bankAccount, account_name: 'Current Bank Account', debit: paymentAmount, credit: 0 },
+          { account_code: '1200', account_name: 'Accounts Receivable', debit: 0, credit: paymentAmount }
+        ]
+      };
+
+      const res = await apiClient.post(API_ENDPOINTS.GL.JOURNALS, payload);
+      setLoading(false);
+
+      if (res.success) {
+        setIsPreviewOpen(false);
+        setIsPosted(true);
+      } else {
+        alert(res.message || 'Failed to post customer payment');
+      }
+    } catch (e: any) {
+      setLoading(false);
+      alert(`Error connecting to REST API Gateway: ${e.message}`);
+    }
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {isPosted && (
-        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center gap-3 shadow-lg">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center gap-3 shadow-lg animate-in fade-in">
           <CheckCircle2 className="w-5 h-5" />
           <div>
-            <div className="font-semibold text-sm">Customer Payment & Allocation Posted</div>
-            <div className="text-xs opacity-80">Reference: {ref} — Allocated to INV-1042 ($2,645.50) via FA Engine</div>
+            <div className="font-semibold text-sm">Customer Payment & Allocation Posted to FrontAccounting Engine!</div>
+            <div className="text-xs opacity-90 font-mono">Reference: {ref} — Allocated to INV-1042 (${paymentAmount.toFixed(2)}) via FA Engine</div>
           </div>
         </div>
       )}
@@ -126,7 +163,7 @@ export const CustomerPaymentStudio: React.FC = () => {
                 <td className="p-3.5 text-right">
                   <input 
                     type="number" 
-                    defaultValue={inv.id === 'INV-1042' ? 2645.50 : 0}
+                    defaultValue={inv.id === 'INV-1042' ? paymentAmount : 0}
                     className="w-32 bg-background border border-border rounded px-2 py-1 text-xs text-right font-bold text-emerald-500"
                   />
                 </td>
@@ -144,7 +181,7 @@ export const CustomerPaymentStudio: React.FC = () => {
       <GLPostingPreviewModal
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
-        onConfirmPost={() => setIsPosted(true)}
+        onConfirmPost={handleConfirmPost}
         documentTitle="Customer Payment Receipt & Allocation"
         reference={ref}
         postings={postings}

@@ -1,0 +1,17 @@
+﻿id	type	trans_no	user	stamp	description
+16	0	9834	admin	2026-07-27 21:22:37	Manual Journal Entry JV-2026-9834: Bank Inter-Account Transfer Test
+15	0	7745	admin	2026-07-27 21:22:37	Manual Journal Entry JV-2026-7745: Inventory Stock Adjustment Test
+14	0	4689	admin	2026-07-27 21:22:37	Manual Journal Entry JV-2026-4689: Supplier Bill Procure-to-Pay Test
+13	10	8248	admin	2026-07-27 21:22:37	Sales Invoice INV-2026-8248 posted to GL & Customer Receivables for debtor #1
+12	0	9442	admin	2026-07-27 21:22:37	Manual Journal Entry JV-2026-9442: GL-001 Double Entry Test
+11	0	1916	admin	2026-07-27 21:08:29	Manual Journal Entry JV-2026-1916: Bank Inter-Account Transfer Test
+10	0	8150	admin	2026-07-27 21:08:29	Manual Journal Entry JV-2026-8150: Inventory Stock Adjustment Test
+9	0	8512	admin	2026-07-27 21:08:29	Manual Journal Entry JV-2026-8512: Supplier Bill Procure-to-Pay Test
+8	10	9028	admin	2026-07-27 21:08:28	Sales Invoice INV-2026-9028 posted to GL & Customer Receivables for debtor #1
+7	0	2548	admin	2026-07-27 21:08:28	Manual Journal Entry JV-2026-2548: GL-001 Double Entry Test
+6	0	2223	admin	2026-07-27 21:06:29	Manual Journal Entry JV-2026-2223: Certification Adjustment
+5	10	5820	admin	2026-07-27 20:45:57	Sales Invoice INV-2026-5820 posted to GL & Customer Receivables for debtor #1
+4	0	3615	admin	2026-07-27 20:45:57	Manual Journal Entry JV-2026-3615: Audit Adjustment
+3	10	1399	admin	2026-07-27 20:14:29	Sales Invoice INV-2026-1399 posted to GL & Customer Receivables for debtor #3
+2	12	31	admin	2026-07-27 18:20:00	Payment REM-2026-0031 allocated to INV-1042 ($2,645.50)
+1	10	1042	admin	2026-07-27 18:24:15	Invoice INV-2026-0042 posted to GL & Customer Receivables

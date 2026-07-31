@@ -1,0 +1,40 @@
+{
+  "module": "Currency",
+  "requiredBusinessCapabilities": [
+    {
+      "id": "CUR-001",
+      "name": "Default Base Currency Flag",
+      "mandatory": true,
+      "description": "System must track which currency is the primary accounting base currency.",
+      "codePattern": "is_default"
+    },
+    {
+      "id": "CUR-002",
+      "name": "Single Base Currency Invariant",
+      "mandatory": true,
+      "description": "Accounting invariant: exactly one currency in 0_currencies must have is_default = 1.",
+      "codePattern": "UPDATE 0_currencies SET is_default = 0"
+    },
+    {
+      "id": "CUR-003",
+      "name": "Prevent Base Currency Archival",
+      "mandatory": true,
+      "description": "Statutory guard: system must block archival or deletion of the base currency.",
+      "codePattern": "Cannot archive base currency"
+    },
+    {
+      "id": "CUR-004",
+      "name": "Atomic Base Currency Switch",
+      "mandatory": true,
+      "description": "Changing default base currency must execute in a DB transaction clearing previous default.",
+      "codePattern": "setDefaultCurrency"
+    },
+    {
+      "id": "CUR-005",
+      "name": "Base Currency Rate Enforcement",
+      "mandatory": true,
+      "description": "The base currency exchange rate must always equal 1.0.",
+      "codePattern": "rate = 1"
+    }
+  ]
+}

@@ -5,6 +5,9 @@ import { ExecutiveDashboard } from './components/dashboard/ExecutiveDashboard';
 import { SalesInvoiceEditor } from './components/sales/SalesInvoiceEditor';
 import { JournalEntryGrid } from './components/gl/JournalEntryGrid';
 import { CommandPalette } from './components/common/CommandPalette';
+import { NotificationDrawer } from './components/common/NotificationDrawer';
+import { DeveloperDiagnosticsBar } from './components/common/DeveloperDiagnosticsBar';
+import { useAppRouter } from './hooks/useAppRouter';
 
 // Master Data Views
 import { ChartOfAccountsView } from './components/masterdata/ChartOfAccountsView';
@@ -21,6 +24,13 @@ import { CustomerPaymentStudio } from './components/transactions/CustomerPayment
 import { SupplierBillStudio } from './components/transactions/SupplierBillStudio';
 import { BankTransactionStudio } from './components/transactions/BankTransactionStudio';
 import { StockAdjustmentStudio } from './components/transactions/StockAdjustmentStudio';
+
+// Workspaces
+import { SalesInvoiceWorkspace } from './components/sales/SalesInvoiceWorkspace';
+import { SupplierBillWorkspace } from './components/transactions/SupplierBillWorkspace';
+import { CustomerPaymentWorkspace } from './components/transactions/CustomerPaymentWorkspace';
+import { BankingWorkspace } from './components/transactions/BankingWorkspace';
+
 
 // Phase 4 Reporting & Integrity Views
 import { TrialBalanceStudio } from './components/reporting/TrialBalanceStudio';
@@ -48,8 +58,13 @@ import { ProductionReleaseStudio } from './components/platform/ProductionRelease
 import { LocalDevDashboardStudio } from './components/platform/LocalDevDashboardStudio';
 
 export function App() {
-  const [currentTab, setCurrentTab] = useState('dashboard');
+  const { currentTab, tabPayload, navigate } = useAppRouter();
   const [isCmdPaletteOpen, setIsCmdPaletteOpen] = useState(false);
+  const [isNotificationDrawerOpen, setIsNotificationDrawerOpen] = useState(false);
+
+  const handleNavigate = (tab: string, payload?: any) => {
+    navigate(tab, payload);
+  };
 
   const getWorkspaceTitle = () => {
     switch (currentTab) {
@@ -59,6 +74,7 @@ export function App() {
       case 'tenant-mgmt': return 'Multi-Tenant Operations & Tenant Provisioning';
       case 'v1-release': return 'Production Release Candidate 1 (v1.0.0-RC1)';
       case 'ai-assistant': return 'Enterprise AI Assistant & Intelligent Search';
+      case 'ai-config': return 'AI Router Configuration & Gemini API Setup';
       case 'integrations': return 'Enterprise Integration Connectors & Webhooks';
       case 'qa-suite': return 'Full QA, E2E & Load Benchmark Suite';
       case 'work-orders': return 'Manufacturing & Work Order Studio';
@@ -90,7 +106,7 @@ export function App() {
   const renderActiveWorkspace = () => {
     switch (currentTab) {
       case 'dashboard':
-        return <ExecutiveDashboard />;
+        return <ExecutiveDashboard onNavigate={handleNavigate} />;
       case 'dev-status':
         return <LocalDevDashboardStudio />;
       case 'plugin-sdk':
@@ -100,7 +116,9 @@ export function App() {
       case 'v1-release':
         return <ProductionReleaseStudio />;
       case 'ai-assistant':
-        return <AIAssistantStudio />;
+        return <AIAssistantStudio initialTab="ASSISTANT" />;
+      case 'ai-config':
+        return <AIAssistantStudio initialTab="CONFIG" />;
       case 'integrations':
         return <IntegrationConnectorsStudio />;
       case 'qa-suite':
@@ -111,14 +129,14 @@ export function App() {
       case 'fixed-assets':
         return <FixedAssetStudio />;
       case 'bank-rec':
-        return <BankReconciliationStudio />;
+        return <BankReconciliationStudio initialAccountCode={tabPayload?.accountCode} />;
       case 'approvals':
         return <ApprovalInboxStudio />;
       case 'scheduler':
         return <SchedulerWorkerStudio />;
       case 'trial-balance':
       case 'reporting':
-        return <TrialBalanceStudio />;
+        return <TrialBalanceStudio onNavigate={handleNavigate} />;
       case 'audit-trail':
         return <AuditTrailStudio />;
       case 'integrity-tests':
@@ -127,28 +145,41 @@ export function App() {
         return <SalesOrderStudio />;
       case 'sales-invoice':
       case 'sales':
-        return <SalesInvoiceEditor />;
+        if (tabPayload?.transNo) {
+          return <SalesInvoiceWorkspace transNo={tabPayload.transNo} onNavigate={handleNavigate} onBack={() => handleNavigate('sales-invoice')} />;
+        }
+        return <SalesInvoiceEditor initialCustomer={tabPayload?.customer} onNavigate={handleNavigate} />;
       case 'customer-payment':
-        return <CustomerPaymentStudio />;
+        if (tabPayload?.transNo) {
+          return <CustomerPaymentWorkspace transNo={tabPayload.transNo} onNavigate={handleNavigate} onBack={() => handleNavigate('customer-payment')} />;
+        }
+        return <CustomerPaymentStudio initialCustomer={tabPayload?.customer} onNavigate={handleNavigate} />;
       case 'supplier-bill':
       case 'purchasing':
-        return <SupplierBillStudio />;
+        if (tabPayload?.transNo) {
+          return <SupplierBillWorkspace transNo={tabPayload.transNo} onNavigate={handleNavigate} onBack={() => handleNavigate('supplier-bill')} />;
+        }
+        return <SupplierBillStudio initialSupplier={tabPayload?.supplier} initialItemCode={tabPayload?.itemCode} onNavigate={handleNavigate} />;
       case 'bank-trans':
       case 'banking':
-        return <BankTransactionStudio />;
+        if (tabPayload?.accountCode) {
+          return <BankingWorkspace accountCode={tabPayload.accountCode} onNavigate={handleNavigate} onBack={() => handleNavigate('banking')} />;
+        }
+        return <BankTransactionStudio initialAccountCode={tabPayload?.accountCode} onNavigate={handleNavigate} />;
+
       case 'stock-adj':
-        return <StockAdjustmentStudio />;
+        return <StockAdjustmentStudio initialItemCode={tabPayload?.itemCode} onNavigate={handleNavigate} />;
       case 'gl-journal':
-        return <JournalEntryGrid />;
+        return <JournalEntryGrid initialAccountCode={tabPayload?.accountCode} initialTransNo={tabPayload?.transNo} onNavigate={handleNavigate} />;
       case 'chart-accounts':
       case 'gl':
-        return <ChartOfAccountsView />;
+        return <ChartOfAccountsView initialAccountCode={tabPayload?.accountCode} onNavigate={handleNavigate} />;
       case 'customers':
-        return <CustomerManagementView />;
+        return <CustomerManagementView initialCustomerId={tabPayload?.customerId} onNavigate={handleNavigate} />;
       case 'suppliers':
-        return <SupplierManagementView />;
+        return <SupplierManagementView initialSupplierId={tabPayload?.supplierId} onNavigate={handleNavigate} />;
       case 'inventory':
-        return <InventoryCatalogView />;
+        return <InventoryCatalogView initialItemCode={tabPayload?.itemCode} onNavigate={handleNavigate} />;
       case 'taxes':
         return <TaxConfigurationView />;
       case 'currencies':
@@ -156,20 +187,21 @@ export function App() {
       case 'dimensions':
         return <DimensionsView />;
       default:
-        return <ExecutiveDashboard />;
+        return <ExecutiveDashboard onNavigate={handleNavigate} />;
     }
   };
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-background">
       {/* LEFT NAVIGATION SIDEBAR */}
-      <Sidebar currentTab={currentTab} onTabChange={setCurrentTab} />
+      <Sidebar currentTab={currentTab} onTabChange={(t) => handleNavigate(t)} />
 
       {/* RIGHT MAIN WORKSPACE */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* TOPBAR */}
         <Topbar 
           onOpenCmdPalette={() => setIsCmdPaletteOpen(true)} 
+          onOpenNotifications={() => setIsNotificationDrawerOpen(true)}
           activeWorkspaceTitle={getWorkspaceTitle()} 
         />
 
@@ -183,8 +215,18 @@ export function App() {
       <CommandPalette 
         isOpen={isCmdPaletteOpen} 
         onClose={() => setIsCmdPaletteOpen(false)}
-        onSelectTab={setCurrentTab}
+        onSelectTab={(t, p) => handleNavigate(t, p)}
       />
+
+      {/* ENTERPRISE NOTIFICATION DRAWER */}
+      <NotificationDrawer 
+        isOpen={isNotificationDrawerOpen}
+        onClose={() => setIsNotificationDrawerOpen(false)}
+        onNavigate={(t, p) => handleNavigate(t, p)}
+      />
+
+      {/* PROTECTED DEVELOPER DIAGNOSTICS & TELEMETRY BAR */}
+      <DeveloperDiagnosticsBar userRole="ADMIN" />
     </div>
   );
 }

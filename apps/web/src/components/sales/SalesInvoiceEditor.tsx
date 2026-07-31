@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Save, Printer, Eye, Calendar, User, FileText, CheckCircle } from 'lucide-react';
+import { Plus, Trash2, Save, Eye, CheckCircle, AlertCircle, Printer } from 'lucide-react';
+import { apiClient } from '../../utils/apiClient';
+import { API_ENDPOINTS } from '../../config/apiEndpoints';
 
 interface InvoiceLine {
   id: string;
@@ -10,8 +12,13 @@ interface InvoiceLine {
   discount: number;
 }
 
-export const SalesInvoiceEditor: React.FC = () => {
-  const [customer, setCustomer] = useState('1');
+interface Props {
+  initialCustomer?: string;
+  onNavigate?: (tab: string, payload?: any) => void;
+}
+
+export const SalesInvoiceEditor: React.FC<Props> = ({ initialCustomer, onNavigate }) => {
+  const [customer, setCustomer] = useState(initialCustomer || '1');
   const [docDate, setDocDate] = useState('2026-07-27');
   const [dueDate, setDueDate] = useState('2026-08-27');
   const [ref, setRef] = useState('INV-2026-0042');
@@ -20,6 +27,9 @@ export const SalesInvoiceEditor: React.FC = () => {
     { id: '2', itemCode: 'ITEM-B200', description: 'Service Assembly B', qty: 2, unitPrice: 450.00, discount: 5 },
   ]);
   const [isSaved, setIsSaved] = useState(false);
+  const [postedResult, setPostedResult] = useState<any>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const addLine = () => {
     const newLine: InvoiceLine = {
@@ -47,29 +57,83 @@ export const SalesInvoiceEditor: React.FC = () => {
   }, 0);
 
   const freight = 50.00;
-  const tax = (subtotal + freight) * 0.10; // 10% GST
+  const tax = (subtotal + freight) * 0.10;
   const grandTotal = subtotal + freight + tax;
 
-  const handleProcessInvoice = () => {
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 4000);
+  const handleProcessInvoice = async () => {
+    setErrorMessage(null);
+    if (!customer) {
+      setErrorMessage('Please select a customer account.');
+      return;
+    }
+    if (lines.length === 0) {
+      setErrorMessage('Please add at least one invoice line item.');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const payload = {
+        debtor_no: Number(customer),
+        doc_ref: ref,
+        invoice_date: docDate,
+        due_date: dueDate,
+        line_items: lines.map(l => ({
+          stock_id: l.itemCode,
+          description: l.description,
+          qty: l.qty,
+          price: l.unitPrice,
+          discount: l.discount
+        }))
+      };
+
+      const response = await apiClient.post(API_ENDPOINTS.SALES.INVOICES, payload);
+      setLoading(false);
+
+      if (response.success) {
+        setPostedResult(response.data);
+        setIsSaved(true);
+      } else {
+        setErrorMessage(response.message);
+      }
+    } catch (err: any) {
+      setLoading(false);
+      setErrorMessage(`Connection Error: ${err.message || 'Unable to reach REST API Gateway'}`);
+    }
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
+      {/* ERROR TOAST */}
+      {errorMessage && (
+        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 flex items-center justify-between text-xs font-semibold">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4" /> {errorMessage}
+          </div>
+          <button onClick={() => setErrorMessage(null)} className="text-rose-500 hover:text-rose-400">✕</button>
+        </div>
+      )}
+
       {/* SUCCESS NOTIFICATION TOAST */}
-      {isSaved && (
+      {isSaved && postedResult && (
         <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 flex items-center justify-between shadow-lg animate-in fade-in slide-in-from-top-4">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-5 h-5" />
             <div>
-              <div className="font-semibold text-sm">Sales Invoice Posted Successfully</div>
-              <div className="text-xs opacity-80">Reference: {ref} — Posted to GL Ledger & Customer Receivables</div>
+              <div className="font-semibold text-sm">Sales Invoice Posted to FrontAccounting Engine!</div>
+              <div className="text-xs opacity-90 font-mono">
+                Ref: {postedResult.invoice_ref} | Trans #{postedResult.trans_no} | Status: {postedResult.status} | GL & Audit Records Created
+              </div>
             </div>
           </div>
-          <button className="px-3 py-1 bg-emerald-500 text-white rounded text-xs font-semibold hover:bg-emerald-600 transition-colors">
-            Print PDF
-          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => window.print()} className="px-3 py-1 bg-emerald-600 text-white rounded text-xs font-semibold hover:bg-emerald-500 transition-colors flex items-center gap-1">
+              <Printer className="w-3.5 h-3.5" /> Print PDF
+            </button>
+            <button onClick={() => setIsSaved(false)} className="px-3 py-1 bg-muted text-muted-foreground rounded text-xs font-medium hover:bg-muted/80">
+              Close
+            </button>
+          </div>
         </div>
       )}
 
@@ -80,14 +144,15 @@ export const SalesInvoiceEditor: React.FC = () => {
           <p className="text-xs text-muted-foreground">Order-to-Cash Workflow — Create & Post Sales Invoice</p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="px-3 py-2 rounded-lg bg-muted text-muted-foreground text-xs font-medium hover:bg-muted/80 flex items-center gap-2 transition-colors">
+          <button onClick={() => window.print()} className="px-3 py-2 rounded-lg bg-muted text-muted-foreground text-xs font-medium hover:bg-muted/80 flex items-center gap-2 transition-colors">
             <Eye className="w-4 h-4" /> Live Preview
           </button>
           <button 
             onClick={handleProcessInvoice}
-            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 flex items-center gap-2 shadow-md transition-all"
+            disabled={loading}
+            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 flex items-center gap-2 shadow-md transition-all disabled:opacity-50"
           >
-            <Save className="w-4 h-4" /> Process & Post (Ctrl+S)
+            <Save className="w-4 h-4" /> {loading ? 'Processing...' : 'Process & Post (Ctrl+S)'}
           </button>
         </div>
       </div>
@@ -103,7 +168,7 @@ export const SalesInvoiceEditor: React.FC = () => {
           >
             <option value="1">Acme Global Logistics (ACME01)</option>
             <option value="2">Apex Systems Inc (APEX02)</option>
-            <option value="3">Global Retailers Ltd (GRL03)</option>
+            <option value="3">Global Enterprise Client (CUST-03)</option>
           </select>
         </div>
 
@@ -113,7 +178,7 @@ export const SalesInvoiceEditor: React.FC = () => {
             type="text" 
             value={ref} 
             onChange={(e) => setRef(e.target.value)}
-            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-primary"
+            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-primary font-mono"
           />
         </div>
 
@@ -123,7 +188,7 @@ export const SalesInvoiceEditor: React.FC = () => {
             type="date" 
             value={docDate} 
             onChange={(e) => setDocDate(e.target.value)}
-            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-primary"
+            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-primary font-mono"
           />
         </div>
 
@@ -133,7 +198,7 @@ export const SalesInvoiceEditor: React.FC = () => {
             type="date" 
             value={dueDate} 
             onChange={(e) => setDueDate(e.target.value)}
-            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-primary"
+            className="w-full bg-background border border-border rounded-lg px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:border-primary font-mono"
           />
         </div>
       </div>

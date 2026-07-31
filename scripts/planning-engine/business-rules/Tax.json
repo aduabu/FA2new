@@ -1,0 +1,33 @@
+{
+  "module": "Tax",
+  "requiredBusinessCapabilities": [
+    {
+      "id": "TAX-001",
+      "name": "Sales GL Account Mapping",
+      "mandatory": true,
+      "description": "Tax rules must specify a valid Sales GL Account code for tax liability posting.",
+      "codePattern": "sales_gl_code"
+    },
+    {
+      "id": "TAX-002",
+      "name": "Purchasing GL Account Mapping",
+      "mandatory": true,
+      "description": "Tax rules must specify a valid Purchasing GL Account code for tax asset/recovery posting.",
+      "codePattern": "purchasing_gl_code"
+    },
+    {
+      "id": "TAX-003",
+      "name": "Tax Exemption Handling",
+      "mandatory": true,
+      "description": "System must support zero-rated (0%) tax exemption rules.",
+      "codePattern": "0.00"
+    },
+    {
+      "id": "TAX-004",
+      "name": "Numeric Percentage Range Guard",
+      "mandatory": true,
+      "description": "Validation must enforce tax rate ranges between 0.00% and 100.00%.",
+      "codePattern": "rate"
+    }
+  ]
+}

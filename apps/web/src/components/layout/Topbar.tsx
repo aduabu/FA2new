@@ -1,12 +1,19 @@
 import React from 'react';
-import { Search, Bell, Command, User, HelpCircle, Layers } from 'lucide-react';
+import { Search, Bell, Command, HelpCircle, Layers } from 'lucide-react';
 
 interface TopbarProps {
   onOpenCmdPalette: () => void;
+  onOpenNotifications?: () => void;
   activeWorkspaceTitle: string;
+  unreadCount?: number;
 }
 
-export const Topbar: React.FC<TopbarProps> = ({ onOpenCmdPalette, activeWorkspaceTitle }) => {
+export const Topbar: React.FC<TopbarProps> = ({ 
+  onOpenCmdPalette, 
+  onOpenNotifications, 
+  activeWorkspaceTitle,
+  unreadCount = 2
+}) => {
   return (
     <header className="h-14 border-b border-border bg-card px-6 flex items-center justify-between flex-shrink-0">
       {/* Workspace Breadcrumb */}
@@ -35,16 +42,22 @@ export const Topbar: React.FC<TopbarProps> = ({ onOpenCmdPalette, activeWorkspac
 
         {/* Action Controls */}
         <div className="flex items-center gap-2 pl-2 border-l border-border">
-          <button className="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative">
+          <button 
+            onClick={onOpenNotifications}
+            className="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors relative"
+            title="Notification Vault"
+          >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            )}
           </button>
           
           <button className="p-2 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
             <HelpCircle className="w-4 h-4" />
           </button>
 
-          {/* User Profile Dropdown Placeholder */}
+          {/* User Profile */}
           <div className="flex items-center gap-2 ml-2 pl-2 border-l border-border cursor-pointer group">
             <div className="w-7 h-7 rounded-full bg-primary/20 text-primary border border-primary/40 flex items-center justify-center font-bold text-xs group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
               AD

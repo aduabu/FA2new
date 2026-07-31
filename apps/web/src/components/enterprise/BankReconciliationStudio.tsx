@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { Landmark, Upload, CheckCircle2, RefreshCw, FileText, ArrowRightLeft } from 'lucide-react';
+import { Landmark, Upload, CheckCircle2 } from 'lucide-react';
 
-export const BankReconciliationStudio: React.FC = () => {
+interface Props {
+  initialAccountCode?: string;
+}
+
+export const BankReconciliationStudio: React.FC<Props> = ({ initialAccountCode }) => {
   const [isMatched, setIsMatched] = useState(false);
+  const [bankAccount, setBankAccount] = useState(initialAccountCode || '1060');
 
   const bankLines = [
     { id: 1, date: '2026-07-27', desc: 'ACH Receipt: Acme Global Logistics', amount: 2645.50, status: 'MATCHED' },
@@ -31,7 +36,7 @@ export const BankReconciliationStudio: React.FC = () => {
       <div className="p-5 rounded-xl bg-card border border-border shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
         <div>
           <span className="text-muted-foreground">Target Bank Account:</span>
-          <div className="text-sm font-bold text-foreground mt-0.5">1060 — Current Bank Account</div>
+          <div className="text-sm font-bold text-foreground mt-0.5">{bankAccount} — Current Bank Account</div>
         </div>
         <div>
           <span className="text-muted-foreground">Bank Statement Ending Balance:</span>

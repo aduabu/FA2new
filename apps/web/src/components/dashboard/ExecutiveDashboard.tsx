@@ -12,13 +12,20 @@ const cashFlowData = [
   { month: 'Jul', inflows: 248000, outflows: 152000 },
 ];
 
-export const ExecutiveDashboard: React.FC = () => {
+interface Props {
+  onNavigate?: (tab: string, payload?: any) => void;
+}
+
+export const ExecutiveDashboard: React.FC<Props> = ({ onNavigate }) => {
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
       {/* KPI METRIC CARDS HEADER */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Revenue */}
-        <div className="bg-card p-5 rounded-xl border border-border shadow-sm hover:border-primary/50 transition-all">
+        <div 
+          onClick={() => onNavigate?.('trial-balance')}
+          className="bg-card p-5 rounded-xl border border-border shadow-sm hover:border-primary/50 cursor-pointer transition-all"
+        >
           <div className="flex items-center justify-between text-muted-foreground mb-2">
             <span className="text-xs font-medium uppercase tracking-wider">Total Revenue (YTD)</span>
             <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500">
@@ -33,7 +40,10 @@ export const ExecutiveDashboard: React.FC = () => {
         </div>
 
         {/* Total Expense */}
-        <div className="bg-card p-5 rounded-xl border border-border shadow-sm hover:border-primary/50 transition-all">
+        <div 
+          onClick={() => onNavigate?.('trial-balance')}
+          className="bg-card p-5 rounded-xl border border-border shadow-sm hover:border-primary/50 cursor-pointer transition-all"
+        >
           <div className="flex items-center justify-between text-muted-foreground mb-2">
             <span className="text-xs font-medium uppercase tracking-wider">Total Expenses</span>
             <div className="p-2 rounded-lg bg-rose-500/10 text-rose-500">
@@ -63,7 +73,10 @@ export const ExecutiveDashboard: React.FC = () => {
         </div>
 
         {/* Bank & Cash Balances */}
-        <div className="bg-card p-5 rounded-xl border border-border shadow-sm hover:border-primary/50 transition-all">
+        <div 
+          onClick={() => onNavigate?.('bank-trans')}
+          className="bg-card p-5 rounded-xl border border-border shadow-sm hover:border-primary/50 cursor-pointer transition-all"
+        >
           <div className="flex items-center justify-between text-muted-foreground mb-2">
             <span className="text-xs font-medium uppercase tracking-wider">Bank & Cash Liquidity</span>
             <div className="p-2 rounded-lg bg-amber-500/10 text-amber-500">
@@ -129,7 +142,7 @@ export const ExecutiveDashboard: React.FC = () => {
               <Clock className="w-4 h-4 text-amber-500" />
               <span>Pending Approvals</span>
             </h3>
-            <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-bold">3 Action Required</span>
+            <button onClick={() => onNavigate?.('approvals')} className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-bold hover:bg-amber-500/20">3 Action Required</button>
           </div>
 
           <div className="space-y-3 flex-1 overflow-y-auto">
@@ -140,8 +153,8 @@ export const ExecutiveDashboard: React.FC = () => {
               </div>
               <div className="text-[11px] text-muted-foreground mt-1">Supplier: Industrial Components Co</div>
               <div className="flex items-center gap-2 mt-3">
-                <button className="flex-1 py-1 bg-primary text-primary-foreground rounded text-[11px] font-medium hover:bg-primary/90 transition-colors">Approve</button>
-                <button className="flex-1 py-1 bg-muted text-muted-foreground hover:bg-destructive hover:text-white rounded text-[11px] font-medium transition-colors">Reject</button>
+                <button onClick={() => onNavigate?.('approvals')} className="flex-1 py-1 bg-primary text-primary-foreground rounded text-[11px] font-medium hover:bg-primary/90 transition-colors">Approve</button>
+                <button onClick={() => onNavigate?.('approvals')} className="flex-1 py-1 bg-muted text-muted-foreground hover:bg-destructive hover:text-white rounded text-[11px] font-medium transition-colors">Reject</button>
               </div>
             </div>
 
@@ -152,8 +165,8 @@ export const ExecutiveDashboard: React.FC = () => {
               </div>
               <div className="text-[11px] text-muted-foreground mt-1">Quarter-end depreciation adjustment</div>
               <div className="flex items-center gap-2 mt-3">
-                <button className="flex-1 py-1 bg-primary text-primary-foreground rounded text-[11px] font-medium hover:bg-primary/90 transition-colors">Approve</button>
-                <button className="flex-1 py-1 bg-muted text-muted-foreground hover:bg-destructive hover:text-white rounded text-[11px] font-medium transition-colors">Reject</button>
+                <button onClick={() => onNavigate?.('approvals')} className="flex-1 py-1 bg-primary text-primary-foreground rounded text-[11px] font-medium hover:bg-primary/90 transition-colors">Approve</button>
+                <button onClick={() => onNavigate?.('approvals')} className="flex-1 py-1 bg-muted text-muted-foreground hover:bg-destructive hover:text-white rounded text-[11px] font-medium transition-colors">Reject</button>
               </div>
             </div>
           </div>
@@ -169,7 +182,7 @@ export const ExecutiveDashboard: React.FC = () => {
               <AlertTriangle className="w-4 h-4 text-rose-500" />
               <span>Low Stock & Reorder Alerts</span>
             </h3>
-            <button className="text-xs text-primary font-medium hover:underline">View All Inventory</button>
+            <button onClick={() => onNavigate?.('inventory')} className="text-xs text-primary font-medium hover:underline">View All Inventory</button>
           </div>
 
           <div className="divide-y divide-border">
@@ -180,7 +193,12 @@ export const ExecutiveDashboard: React.FC = () => {
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-muted-foreground">Qty: <strong className="text-rose-500">0</strong> / Reorder: 10</span>
-                <button className="px-2.5 py-1 rounded bg-muted hover:bg-primary hover:text-primary-foreground text-[11px] font-medium transition-colors">Raise PO</button>
+                <button 
+                  onClick={() => onNavigate?.('supplier-bill', { itemCode: 'ITEM-A100' })}
+                  className="px-2.5 py-1 rounded bg-muted hover:bg-primary hover:text-primary-foreground text-[11px] font-medium transition-colors"
+                >
+                  Raise PO
+                </button>
               </div>
             </div>
 
@@ -191,7 +209,12 @@ export const ExecutiveDashboard: React.FC = () => {
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-muted-foreground">Qty: <strong className="text-amber-500">3</strong> / Reorder: 15</span>
-                <button className="px-2.5 py-1 rounded bg-muted hover:bg-primary hover:text-primary-foreground text-[11px] font-medium transition-colors">Raise PO</button>
+                <button 
+                  onClick={() => onNavigate?.('supplier-bill', { itemCode: 'ITEM-B200' })}
+                  className="px-2.5 py-1 rounded bg-muted hover:bg-primary hover:text-primary-foreground text-[11px] font-medium transition-colors"
+                >
+                  Raise PO
+                </button>
               </div>
             </div>
           </div>
@@ -202,25 +225,37 @@ export const ExecutiveDashboard: React.FC = () => {
           <div>
             <h3 className="font-semibold text-sm text-foreground mb-4">Quick Task Launchpad</h3>
             <div className="grid grid-cols-2 gap-2.5">
-              <button className="p-3 rounded-lg bg-muted/60 hover:bg-primary/10 hover:border-primary/40 border border-border text-left transition-all group">
+              <button 
+                onClick={() => onNavigate?.('sales-invoice')}
+                className="p-3 rounded-lg bg-muted/60 hover:bg-primary/10 hover:border-primary/40 border border-border text-left transition-all group"
+              >
                 <Plus className="w-4 h-4 text-primary mb-1 group-hover:scale-110 transition-transform" />
                 <div className="text-xs font-semibold text-foreground">New Invoice</div>
                 <div className="text-[10px] text-muted-foreground">Sales & AR</div>
               </button>
 
-              <button className="p-3 rounded-lg bg-muted/60 hover:bg-primary/10 hover:border-primary/40 border border-border text-left transition-all group">
+              <button 
+                onClick={() => onNavigate?.('gl-journal')}
+                className="p-3 rounded-lg bg-muted/60 hover:bg-primary/10 hover:border-primary/40 border border-border text-left transition-all group"
+              >
                 <Plus className="w-4 h-4 text-primary mb-1 group-hover:scale-110 transition-transform" />
                 <div className="text-xs font-semibold text-foreground">Journal Entry</div>
                 <div className="text-[10px] text-muted-foreground">General Ledger</div>
               </button>
 
-              <button className="p-3 rounded-lg bg-muted/60 hover:bg-primary/10 hover:border-primary/40 border border-border text-left transition-all group">
+              <button 
+                onClick={() => onNavigate?.('trial-balance')}
+                className="p-3 rounded-lg bg-muted/60 hover:bg-primary/10 hover:border-primary/40 border border-border text-left transition-all group"
+              >
                 <FileText className="w-4 h-4 text-emerald-500 mb-1 group-hover:scale-110 transition-transform" />
                 <div className="text-xs font-semibold text-foreground">Trial Balance</div>
                 <div className="text-[10px] text-muted-foreground">Financial Reports</div>
               </button>
 
-              <button className="p-3 rounded-lg bg-muted/60 hover:bg-primary/10 hover:border-primary/40 border border-border text-left transition-all group">
+              <button 
+                onClick={() => onNavigate?.('bank-rec')}
+                className="p-3 rounded-lg bg-muted/60 hover:bg-primary/10 hover:border-primary/40 border border-border text-left transition-all group"
+              >
                 <CheckCircle2 className="w-4 h-4 text-amber-500 mb-1 group-hover:scale-110 transition-transform" />
                 <div className="text-xs font-semibold text-foreground">Bank Rec</div>
                 <div className="text-[10px] text-muted-foreground">Cash & Banking</div>

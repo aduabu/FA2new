@@ -57,3 +57,56 @@
     @apply bg-background text-foreground font-sans;
   }
 }
+
+/* ==========================================================================
+   REF ERP Platform — Document Print Template System (@media print)
+   ========================================================================== */
+@media print {
+  /* Hide Non-Printable Chrome Elements */
+  aside, 
+  header, 
+  nav, 
+  .no-print, 
+  button:not(.allow-print), 
+  .dev-tools-panel,
+  .command-palette-backdrop {
+    display: none !important;
+  }
+
+  /* Reset Page Containers for Clean Document Output */
+  body, 
+  main, 
+  #root, 
+  .p-6, 
+  .max-w-7xl {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Ensure Tables Break Cleanly */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  /* Force Colors & Backgrounds in PDF */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
